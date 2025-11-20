@@ -165,6 +165,49 @@ if ys.size > 0:
     bottom = int(ys.max()) + 1
     fullimage = fullimage[top:bottom, :]
 
+# Restore identical regions above and below the diff region
+# Use the first original image as the source of identical content
+if (
+    img_height is not None
+    and not (bottommost <= topmost or topmost >= 1e8)
+    and len(files) > 0
+):
+    first_bgr = cv2.imread(files[0])
+    if first_bgr is not None:
+        first_rgb = cv2.cvtColor(first_bgr, cv2.COLOR_BGR2RGB)
+
+        # Clamp diff boundaries to valid image range
+        top_diff = max(0, min(int(topmost), img_height))
+        bottom_diff = max(top_diff, min(int(bottommost), img_height))
+
+        # Top unchanged region: rows [0, top_diff)
+        top_part = first_rgb[0:top_diff, 0:img_width]
+
+        # Bottom unchanged region: rows [bottom_diff, img_height)
+        bottom_part = first_rgb[bottom_diff:img_height, 0:img_width]
+
+        final_height = (
+            top_part.shape[0] + fullimage.shape[0] + bottom_part.shape[0]
+        )
+        finalimage = np.zeros((final_height, img_width, 3), dtype=np.uint8)
+
+        cur = 0
+        if top_part.size > 0:
+            h_top = top_part.shape[0]
+            finalimage[cur : cur + h_top, 0:img_width] = top_part
+            cur += h_top
+
+        if fullimage.size > 0:
+            h_diff = fullimage.shape[0]
+            finalimage[cur : cur + h_diff, 0:img_width] = fullimage
+            cur += h_diff
+
+        if bottom_part.size > 0:
+            h_bottom = bottom_part.shape[0]
+            finalimage[cur : cur + h_bottom, 0:img_width] = bottom_part
+
+        fullimage = finalimage
+
 # Save result next to first selected image
 out_dir = os.path.dirname(files[0])
 
