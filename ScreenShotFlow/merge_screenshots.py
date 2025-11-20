@@ -42,7 +42,7 @@ for file in files:
         img_height = height
 
     if i == 1 and imagergbprev is not None:
-        print("Performing analysis")
+        print("Analyzing screenshots")
 
         diff_mask = np.any(imagergb != imagergbprev, axis=2)
         ys, xs = np.where(diff_mask)
@@ -54,7 +54,7 @@ for file in files:
             bottommost = max(bottommost, int(ys.max()))
 
             print(
-                "Differences at (%d, %d) to (%d, %d)"
+                "Differences from (%d, %d) to (%d, %d)"
                 % (leftmost, rightmost, topmost, bottommost)
             )
 
@@ -117,7 +117,7 @@ cv2.imwrite(
 
 lineonnew = 0
 
-print("Stitching")
+print("Merging together")
 for num in range(0, total):
     if i > 0:
         path1 = "stitchtmp" + foldersep + "diff" + str(i - 1) + ".png"
@@ -152,8 +152,6 @@ for num in range(0, total):
                         lineonnew += 1
 
     i += 1
-
-print("Cropping vertically")
 
 # Only crop vertically, keep full width
 mask = np.any(fullimage != 0, axis=2)
@@ -209,7 +207,7 @@ if (
         fullimage = finalimage
 
 # Save result next to first selected image
-out_dir = os.path.dirname(files[0])
+out_dir = os.path.dirname(files[0]) # type: ignore
 
 if not os.path.isdir(out_dir):
     os.makedirs(out_dir, exist_ok=True)
@@ -226,4 +224,4 @@ else:
         subprocess.call(["open", "-R", out_path])
 
 shutil.rmtree("stitchtmp")
-print("Done!")
+print("Your screenshots have been merged!")
