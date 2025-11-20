@@ -1,0 +1,11 @@
+__pycache__
+*.vscode
+*.db
+*.log
+*.lock
+*.venv
+*.egg-info
+*.bin
+*.json
+!.gitkeep
+
