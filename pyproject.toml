@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pixel-workbench"
+version = "0.1.0"
+description = "Standalone scripts for manipulating images and video assets."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python>=4.8",
+    "Pillow>=10.0",
+]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "scripts/**/*",
+    "README.md",
+    "LICENSE",
+]

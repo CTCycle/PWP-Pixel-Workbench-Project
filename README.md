@@ -1,57 +1,40 @@
 # Pixel Workbench Project
 
-A collection of small, task focused scripts for manipulating image and video assets. The repository is not a unified framework, it is a set of independent utilities. Each directory contains its own logic, requirements, and documentation. This top level file only describes the overall structure.
-
-## Contents
-
-### 1. Screenshots_wizard
-A Python script for merging screenshots into a single composed output.
-Files include:
-- merge_screenshots.py
-- README.md
-- LICENSE
-
-Functionality is limited to image merging. No broader workflow is provided.
-
-### 2. WEPB_to_video_converter
-A converter for producing a video file from a collection of WEBP images.
-Files include:
-- WEPB_to_video_converter.py
-- requirements.txt
-- README.md
-- directories webp and video for input and output staging
-
-Actual video encoding behavior depends on the libraries listed in requirements.txt. Consult the component specific README for precise usage.
+Standalone scripts to manipulate images and video, including converting animated WEBP files to MP4, merging snapshots, and other one-off utilities. Each tool runs on its own; there is no shared framework.
 
 ## Installation
 
-There is no shared dependency set. Install requirements only for the tool you want to run.
+- Use Python 3.12 and an optional virtual environment (`python -m venv .venv` then activate it).
+- Install the shared dependencies declared in `pyproject.toml`:
 
-Example:
+  ```
+  pip install -e .
+  ```
+- If you prefer a global install, run the same command without creating a virtual environment.
 
-\`\`\`
-cd WEPB_to_video_converter
-pip install -r requirements.txt
-\`\`\`
+## Scripts
 
-If the Screenshots_wizard tool has dependencies, they are documented in its own README.
+### WEBP to video converter
+- Converts a single animated WEBP to MP4 while preserving frame timing.
+- Run from the repo root or the `scripts/WEB2Video` folder:
+  ```
+  python scripts/WEB2Video/WEPB_to_video_converter.py
+  ```
+- A file picker appears; choose the source WEBP. The MP4 is written next to the selected file using the same base name.
 
-## Usage
+### Screen stitcher
+- Merges ordered screenshots into one image, keeping identical regions only once.
+- Run:
+  ```
+  python scripts/ScreenStitch.py
+  ```
+- Select the screenshots in order when prompted. The output `stitch.png` is saved next to the first chosen image; the temporary `stitchtmp/` folder is removed automatically.
 
-Run scripts directly from their respective directories. Inputs and outputs must follow the conventions defined inside each tool.
+## Usage notes
 
-Examples:
+- Scripts are independent; run only what you need.
+- Outputs are written alongside your inputs unless otherwise noted.
 
-Screenshots_wizard/merge_screenshots.py
-WEPB_to_video_converter/WEPB_to_video_converter.py
+## License
 
-
-No orchestration or entrypoint exists at the project root. Each tool performs one operation and then exits.
-
-## Licensing
-
-Each directory contains its own license file. Licenses are not consolidated at the project root. Review them before redistribution or integration.
-
-## Scope
-
-The repository is intended as a simple workspace for small media utilities. It is not designed for scalability, plugin systems, or deep extensibility. Additional scripts can be added in separate directories as long as they are self contained and documented.
+See `LICENSE` for terms.
