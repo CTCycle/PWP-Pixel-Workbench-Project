@@ -5,12 +5,12 @@ __pycache__/
 *.log
 *.lock
 *.bin
-*.json
+
 .venv/
 .env
 .env.*
 .vscode/
-*.egg-info/
+/
 build/
 dist/
 stitchtmp/
